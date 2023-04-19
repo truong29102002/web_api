@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using web_api.Data;
 using web_api.Models;
 
 namespace web_api.Controllers
@@ -9,94 +9,115 @@ namespace web_api.Controllers
     [ApiController]
     public class SinhVienController : ControllerBase
     {
-        public static List<SinhVien> sv = new List<SinhVien>();
-        [HttpGet(Name = "GetAll")]
+        //private readonly dbapiContext _context;
+
+        //public SinhVienController(dbapiContext context) {
+        //    _context = context;
+        //}
+        public static dbapiContext context = new dbapiContext();
+        [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(sv);
+            try
+            {
+                var ds = context.SinhViens.ToList();
+                return Ok(ds);
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+
         }
-        [HttpGet("{id}")] // http:localhost:xxx//api/sinhvien/{id}
-        public IActionResult Get(Guid id)
+        [HttpGet("{id}")]
+        public IActionResult GetID(int id)
         {
             try
             {
-                var svt = sv.SingleOrDefault(x => x.id == id);
-                if (svt == null)
+                var getId = context.SinhViens.SingleOrDefault(x => x.Id == id);
+                if (getId != null)
                 {
-                    return NotFound();
-                }
-                return Ok(svt);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message); 
-            }
-           
-        }
-
-        [HttpPost]
-        public IActionResult CreateSv(SinhVien svn)
-        {
-            SinhVien svm = new SinhVien
-            {
-                id = Guid.NewGuid(),
-                Name = svn.Name
-            };
-            sv.Add(svm);
-            return Ok(new
-            {
-                Success = true,
-                Data = sv
-            });
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateSv(Guid id,  SinhVien svn)
-        {
-            try
-            {
-                var svt = sv.SingleOrDefault(x => x.id == id);
-                if (svt == null)
-                {
-                    return NotFound();
-                }
-                if(svt.id != svn.id)
-                {
-                    return BadRequest();
+                    return Ok(getId);
                 }
                 else
                 {
-                    svt.id = svn.id;
-                    svt.Name = svn.Name;
+                    return NotFound();
                 }
-                return Ok(svt);
             }
             catch (Exception ex)
             {
 
                 return BadRequest(ex.Message);
             }
+
+
         }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteSv(Guid id)
+
+        [HttpPost]
+        public IActionResult CreateNSV(SinhVienData data)
         {
             try
             {
-                var svt = sv.SingleOrDefault(x => x.id == id);
-                if (svt == null)
+                var svm = new SinhVien{ Name = data.Name, Diachi = data.Diachi, Lop = data.Lop };
+                context.Add(svm);
+                context.SaveChanges();
+                return Ok(new
                 {
-                    return NotFound();
-                }
-                sv.Remove(svt);
-                return Ok(svt);
+                    Content = "Them thanh cong",
+                    Data = svm
+                });
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
 
+        [HttpPut("{id}")] // update sinhvien 
+        public IActionResult UpdateSV(int id, SinhVienData sv)
+        {
+            try
+            {
+                var getId = context.SinhViens.SingleOrDefault(x => x.Id == id);
+                if (getId != null)
+                {
+                    getId.Name = sv.Name;
+                    getId.Diachi = sv.Diachi;
+                    getId.Lop = sv.Lop;
+                    context.SaveChanges();
+                    return Ok(getId);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteSV(int id) {
+            try
+            {
+                var getId = context.SinhViens.SingleOrDefault(x => x.Id == id);
+                if (getId != null)
+                {
+                    context.Remove(getId);
+                    context.SaveChanges();
+                    return Ok("Deleted");
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
