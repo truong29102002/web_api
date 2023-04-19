@@ -8,7 +8,7 @@ namespace web_api.Models
     public partial class dbapiContext : DbContext
     {
         public dbapiContext()
-        {
+        { 
         }
 
         public dbapiContext(DbContextOptions<dbapiContext> options)
