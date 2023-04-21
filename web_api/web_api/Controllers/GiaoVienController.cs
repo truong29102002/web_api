@@ -16,8 +16,8 @@ namespace web_api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var allGV = _contextAccessor.GiaoViens.ToList();
-            return Ok(allGV);
+            return Ok(_contextAccessor.GiaoViens.ToList());
         }
+
     }
 }
