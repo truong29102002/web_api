@@ -3,5 +3,7 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
+    <NameOfLastUsedPublishProfile>D:\API_asp\web_api\web_api\Properties\PublishProfiles\IISProfile.pubxml</NameOfLastUsedPublishProfile>
+    <WebStackScaffolding_ControllerDialogWidth>650.4</WebStackScaffolding_ControllerDialogWidth>
   </PropertyGroup>
 </Project>
