@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using web_api.Data;
 using web_api.Models;
@@ -16,6 +17,7 @@ namespace web_api.Controllers
         //}
         public static dbapiContext context = new dbapiContext();
         [HttpGet]
+        [Authorize]
         public IActionResult GetAll()
         {
             try
@@ -31,6 +33,7 @@ namespace web_api.Controllers
 
         }
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetID(int id)
         {
             try
@@ -55,6 +58,7 @@ namespace web_api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateNSV(SinhVienData data)
         {
             try
@@ -62,11 +66,7 @@ namespace web_api.Controllers
                 var svm = new SinhVien{ Name = data.Name, Diachi = data.Diachi, Lop = data.Lop };
                 context.Add(svm);
                 context.SaveChanges();
-                return Ok(new
-                {
-                    Content = "Them thanh cong",
-                    Data = svm
-                });
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception ex)
             {

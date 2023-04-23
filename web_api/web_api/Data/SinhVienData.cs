@@ -1,6 +1,7 @@
 ﻿namespace web_api.Data
 {
-    public class SinhVienData
+    // dung cho viec them du lieu vao sinh vien model
+    public class SinhVienData 
     {
         public string? Name { get; set; }
         public string? Diachi { get; set; }
